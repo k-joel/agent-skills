@@ -1,2 +1,2 @@
-# AionUI-Skills
-AionUI Skills repository containing GitHub skill and other skills
+# agent-skills
+Agent Skills repository containing GitHub skill and other skills

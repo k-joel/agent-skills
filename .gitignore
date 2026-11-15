@@ -1,12 +1,9 @@
-# Exclude all files by default
-*
+# Agents
+.agents/
+.commandcode/
 
-# Include the github skill directory and all its contents recursively
-!github/
-!github/**/*
+# Skills
+skills-lock.json
 
-# Include the .gitignore file itself
-!.gitignore
-
-# Include README.md
-!README.md
+# Temp
+.ref-docs/
