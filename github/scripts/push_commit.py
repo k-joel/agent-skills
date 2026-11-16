@@ -17,11 +17,16 @@ import os
 import sys
 
 def run_command(command, cwd=None):
-    """Run a shell command and return output."""
+    """Run a shell command and return output.
+
+    `command` may be a string (run through the shell) or a list of args
+    (executed directly). Pass a list whenever arguments come from user
+    input so they are not interpreted by the shell.
+    """
     try:
         result = subprocess.run(
             command,
-            shell=True,
+            shell=not isinstance(command, list),
             cwd=cwd,
             capture_output=True,
             text=True,
@@ -59,10 +64,7 @@ def initialize_git_repo(path):
     readme_path = os.path.join(path, "README.md")
     if not os.path.exists(readme_path):
         with open(readme_path, "w") as f:
-            f.write(f"# {os.path.basename(path)}
-
-Project description goes here.
-")
+            f.write(f"# {os.path.basename(path)}\n\nProject description goes here.\n")
     
     return True
 
@@ -94,7 +96,7 @@ def commit_and_push(path, commit_message, branch="main"):
     
     # Commit changes
     print(f"Committing changes with message: '{commit_message}'")
-    stdout, stderr, returncode = run_command(f'git commit -m "{commit_message}"', cwd=path)
+    stdout, stderr, returncode = run_command(["git", "commit", "-m", commit_message], cwd=path)
     if returncode != 0:
         print(f"❌ Failed to commit: {stderr}")
         return False
@@ -110,14 +112,14 @@ def commit_and_push(path, commit_message, branch="main"):
     
     # Push to remote
     print(f"Pushing to remote repository...")
-    stdout, stderr, returncode = run_command(f"git push -u origin {branch}", cwd=path)
+    stdout, stderr, returncode = run_command(["git", "push", "-u", "origin", branch], cwd=path)
     if returncode != 0:
         print(f"❌ Failed to push: {stderr}")
         
         # Try to set upstream if not set
         if "no upstream branch" in stderr.lower():
             print("Setting upstream branch...")
-            stdout, stderr, returncode = run_command(f"git push --set-upstream origin {branch}", cwd=path)
+            stdout, stderr, returncode = run_command(["git", "push", "--set-upstream", "origin", branch], cwd=path)
             if returncode != 0:
                 print(f"❌ Still failed to push: {stderr}")
                 return False
@@ -146,12 +148,10 @@ def main():
     success = commit_and_push(args.repo_path, args.message, args.branch)
     
     if success:
-        print("
-🎉 Successfully committed and pushed changes!")
+        print("\n🎉 Successfully committed and pushed changes!")
         return 0
     else:
-        print("
-❌ Failed to commit and push changes.")
+        print("\n❌ Failed to commit and push changes.")
         return 1
 
 if __name__ == "__main__":

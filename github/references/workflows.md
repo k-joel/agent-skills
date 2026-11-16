@@ -55,7 +55,7 @@ main (trunk)
 ### Standard PR Process
 1. **Create Branch**
    ```bash
-   git checkout -b feature/description
+   git switch -c feature/description
    ```
 
 2. **Make Changes**
@@ -184,17 +184,20 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
-        node-version: '20'
+        node-version: '24'
     
     - name: Install dependencies
       run: npm ci
@@ -215,18 +218,44 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: read
+  id-token: write   # for OIDC to the cloud provider
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     
     - name: Deploy to Production
       run: |
         # Deployment commands
         echo "Deploying version ${GITHUB_REF#refs/tags/}"
 ```
+
+### Action versioning and runtimes
+
+Pin to a current major and verify before copying — majors advance. Current majors (as of this writing):
+
+| Action | Current major |
+|---|---|
+| `actions/checkout` | `v7` |
+| `actions/setup-node` | `v7` |
+| `actions/setup-python` | `v7` |
+| `actions/github-script` | `v9` |
+| `actions/upload-artifact` | `v7` |
+| `actions/download-artifact` | `v8` |
+
+Current majors run on the **Node 24** runtime (Node 20 has been removed from runners and older action majors are effectively obsolete). For high-security repositories, pin third-party actions to a full-length commit SHA rather than a moving tag.
+
+### Workflow security essentials
+
+- Declare `permissions:` at workflow or job level and grant the least needed (default to `contents: read`).
+- Use `id-token: write` + OIDC instead of long-lived cloud secrets.
+- Never interpolate `${{ github.event.* }}` values (`title`, `body`, `head_ref`, …) directly into `run:` — pass them via `env:` and reference the shell variable.
+- Avoid `pull_request_target` and never check out fork code inside it (privilege-escalation "pwn request" risk). GitHub blocks `pull_request_target` by default in public repositories.
 
 ## Code Review Guidelines
 
@@ -273,21 +302,41 @@ jobs:
    - No merge commits allowed
 
 ### Configuration
-```yaml
-# .github/branch-protection.yml
-main:
-  required_status_checks:
-    strict: true
-    contexts:
-      - "ci/tests"
-  required_pull_request_reviews:
-    required_approving_review_count: 1
-    dismiss_stale_reviews: true
-  enforce_admins: false
-  required_linear_history: true
-  allow_force_pushes: false
-  allow_deletions: false
+
+Branch protection is **not** configured through a `.github/branch-protection.yml` file — no such file exists. Configure it through the repository UI (Settings → Branches), the REST API, or repository/organization **rulesets**.
+
+REST API — replace branch protection (`PUT /repos/{owner}/{repo}/branches/{branch}/protection`):
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2026-03-10" \
+  -H "User-Agent: my-app" \
+  https://api.github.com/repos/OWNER/REPO/branches/main/protection \
+  -d '{
+    "required_status_checks": {
+      "strict": true,
+      "checks": [{ "context": "ci/tests", "app_id": null }]
+    },
+    "enforce_admins": false,
+    "required_pull_request_reviews": {
+      "required_approving_review_count": 1,
+      "dismiss_stale_reviews": true
+    },
+    "restrictions": null,
+    "required_linear_history": true,
+    "required_conversation_resolution": true,
+    "allow_force_pushes": false,
+    "allow_deletions": false
+  }'
 ```
+
+Notes:
+- Requires admin permission on the repository.
+- `required_status_checks`, `enforce_admins`, `required_pull_request_reviews`, and `restrictions` are required fields — pass `null` to disable each one.
+- Prefer `checks` (with `context` and `app_id`) over `contexts`, which is being closed down.
+- Rulesets are the newer, more flexible alternative for organization-wide policies.
 
 ## Collaboration Patterns
 
@@ -327,11 +376,14 @@ on:
   pull_request:
     types: [opened]
 
+permissions:
+  pull-requests: write
+
 jobs:
   assign:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v9
         with:
           script: |
             github.rest.issues.addAssignees({
@@ -341,3 +393,5 @@ jobs:
               assignees: ['team-lead']
             })
 ```
+
+> `actions/github-script@v9` removed `require('@actions/github')` from scripts. Use the injected `github`, `octokit`, `context`, `core`, and `getOctokit` bindings instead of importing modules.

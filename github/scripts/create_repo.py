@@ -33,8 +33,9 @@ def create_github_repository(token, repo_name, description="", private=False):
     url = "https://api.github.com/user/repos"
     
     headers = {
-        "Authorization": f"token {token}",
-        "Accept": "application/vnd.github.v3+json",
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2026-03-10",
         "Content-Type": "application/json"
     }
     
@@ -99,14 +100,12 @@ def main():
     )
     
     if result:
-        print("
-🎉 Repository created successfully!")
+        print("\n🎉 Repository created successfully!")
         print(f"🔗 Browse: {result['html_url']}")
         print(f"📋 Clone: git clone {result['clone_url']}")
         return 0
     else:
-        print("
-❌ Failed to create repository.")
+        print("\n❌ Failed to create repository.")
         return 1
 
 if __name__ == "__main__":
