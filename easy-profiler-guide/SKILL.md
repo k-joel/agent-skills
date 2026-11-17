@@ -1,5 +1,5 @@
 ---
-name: cpp-easy-profiler-guide
+name: easy-profiler-guide
 description: Comprehensive guide for integrating and instrumenting the easy_profiler C++ library (v2.1.0) and analyzing its captures, cross-platform (Windows/Linux/macOS). Use when adding, editing, or reviewing EASY_* instrumentation macros or easy/profiler.h includes, linking or configuring easy_profiler builds (CMake, vcpkg, MSBuild), setting up profiling build configurations, capturing, parsing, or summarizing .prof files, debugging empty or missing captures, or comparing C++ performance before/after a change. Bundled stdlib-only Python scripts summarize .prof captures and diff runs.
 ---
 
