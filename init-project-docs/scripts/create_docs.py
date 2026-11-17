@@ -20,7 +20,7 @@ exists today, not planned or historical designs. When this document and the code
 disagree, the code wins — update this document in the same change. Canonical
 terms live in [`GLOSSARY.md`](GLOSSARY.md), rationale in
 [`DECISIONS.md`](DECISIONS.md), open defects in [`ISSUES.md`](ISSUES.md),
-structural debt in [`ARCH_ISSUES.md`](ARCH_ISSUES.md), and operational gotchas
+structural debt in [`TECH_DEBT.md`](TECH_DEBT.md), and operational gotchas
 in [`NOTES.md`](NOTES.md).
 
 <!--
@@ -61,7 +61,7 @@ INCLUSION / EXCLUSION CRITERIA
 - EXCLUDE (ROUTE ELSEWHERE OR OMIT):
   - Why a choice was made / alternatives considered -> DECISIONS.md
   - Functional bugs or regressions -> ISSUES.md
-  - Structural debt, layer violations, or smells -> ARCH_ISSUES.md
+  - Structural debt, layer violations, or smells -> TECH_DEBT.md
   - Operational quirks or debugging tips -> NOTES.md
   - Standalone term definitions -> GLOSSARY.md
   - Speculative roadmaps, exhaustive line-by-line code dumps, or boilerplate
@@ -281,7 +281,7 @@ EXAMPLE LAYOUT (4-SPACE INDENTED)
     ## 13. Maintaining this document
 
     Update triggers and companion-doc split (`ARCH.md`, `DECISIONS.md`,
-    `ISSUES.md`, `ARCH_ISSUES.md`, `NOTES.md`, `GLOSSARY.md`).
+    `ISSUES.md`, `TECH_DEBT.md`, `NOTES.md`, `GLOSSARY.md`).
 -->
 
 ---
@@ -1167,7 +1167,7 @@ AGENTS_ENTRIES = {
     "glossary": "- [docs/GLOSSARY.md](docs/GLOSSARY.md) — canonical domain terms; use its vocabulary in code, docs, and summaries.",
     "issues": "- [docs/ISSUES.md](docs/ISSUES.md) — the ongoing issue tracker. **Add every issue, bug or defect flagged during an LLM session here — even if it is only mentioned in passing in the summary — and delete the entry once it is fixed.**",
     "notes": "- [docs/NOTES.md](docs/NOTES.md) — gotchas, watch-outs and oddities. **Add anything a future session needs to know that is not an open issue here.**",
-    "runbook": "- [docs/RUNBOOK.md](docs/RUNBOOK.md): numbered operator procedures. **Review it each session and update any procedures affected by the work.**",
+    "runbook": "- [docs/RUNBOOK.md](docs/RUNBOOK.md) — numbered operator procedures. **Review it each session and update any procedures affected by the work.**",
     "tech-debt": "- [docs/TECH_DEBT.md](docs/TECH_DEBT.md) — architectural debt and code smells. **Add every structural anti-pattern, code duplication, or AI-induced code smell spotted during a session here, and delete the entry once refactored.**",
     "tools": "- [docs/TOOLS.md](docs/TOOLS.md) — the inventory of development scripts in [tools/](tools/). **Check it before writing any new tool, and update it whenever a tool is created or modified.**",
 }
