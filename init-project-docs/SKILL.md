@@ -1,6 +1,6 @@
 ---
 name: init-project-docs
-description: One-time initialization of the standard project documentation set (ARCH, CHANGELOG, DECISIONS, GLOSSARY, ISSUES, NOTES, RUNBOOK, TECH_DEBT, TOOLS) in docs/, registered in the root AGENTS.md. Use when setting up or standardizing documentation for a new or existing project. Creates or refreshes each doc with its canonical header, adds the Project Docs entries to AGENTS.md, and drafts initial content following each doc's embedded maintenance guide. Single-use: every generated doc carries its own maintenance instructions, so later updates follow the doc itself and this skill is never invoked again.
+description: 'One-time initialization of the standard project documentation set (ARCH, CHANGELOG, DECISIONS, GLOSSARY, ISSUES, NOTES, RUNBOOK, TECH_DEBT, TOOLS) in docs/, registered in the root AGENTS.md. Use when setting up or standardizing documentation for a new or existing project. Creates or refreshes each doc with its canonical header, adds the Project Docs entries to AGENTS.md, and drafts initial content following each doc''s embedded maintenance guide. Single-use: every generated doc carries its own maintenance instructions, so later updates follow the doc itself and this skill is never invoked again.'
 ---
 
 # Initialize Project Documentation
