@@ -13,13 +13,27 @@ opinionated, and grounded in real, validated workflows.
 
 First-party skills maintained in this repository:
 
-| Skill | Category | Description |
-|-------|----------|-------------|
-| [ask](ask/SKILL.md) | Q&A | Answer technical questions and explain code, concepts, and architecture in strict read-only mode. Grounds answers in the actual codebase and recommends changes without ever applying them. |
-| [easy-profiler-guide](easy-profiler-guide/SKILL.md) | C++ / Performance | End-to-end guide to the `easy_profiler` C++ library (v2.1.0): integrate the build, instrument with `EASY_*` macros, capture `.prof` files, and analyze them. Bundles stdlib-only Python scripts to summarize and diff captures. |
-| [github](github/SKILL.md) | DevOps / GitHub | GitHub operations via the `gh` CLI and REST/GraphQL APIs: repositories, commits, branches, pull requests, issues, and GitHub Actions — with auth, security, and troubleshooting guidance. |
-| [init-project-docs](init-project-docs/SKILL.md) | Documentation | One-time initialization of the standard project documentation set (`ARCH`, `CHANGELOG`, `DECISIONS`, `GLOSSARY`, `ISSUES`, `NOTES`, `RUNBOOK`, `TECH_DEBT`, `TOOLS`) in `docs/`, registered in the root `AGENTS.md`. |
-| [qt-coding-guide](qt-coding-guide/SKILL.md) | Qt / QML | Modern Qt 6 and QML coding on Windows with MSBuild: strict MVVM, C++/QML integration, layouts and performance, and the `qmllint` / `qmlcachegen` / `moc` tooling pipeline. |
+| Skill | Description |
+|-------|-------------|
+| [ask](ask/SKILL.md) | Answer technical questions and explain code, concepts, and architecture in strict read-only mode. Grounds answers in the actual codebase and recommends changes without ever applying them. |
+| [easy-profiler-guide](easy-profiler-guide/SKILL.md) | End-to-end guide to the `easy_profiler` C++ library (v2.1.0): integrate the build, instrument with `EASY_*` macros, capture `.prof` files, and analyze them. Bundles stdlib-only Python scripts to summarize and diff captures. |
+| [github](github/SKILL.md) | GitHub operations via the `gh` CLI and REST/GraphQL APIs: repositories, commits, branches, pull requests, issues, and GitHub Actions — with auth, security, and troubleshooting guidance. |
+| [init-project-docs](init-project-docs/SKILL.md) | One-time initialization of the standard project documentation set (`ARCH`, `CHANGELOG`, `DECISIONS`, `GLOSSARY`, `ISSUES`, `NOTES`, `RUNBOOK`, `TECH_DEBT`, `TOOLS`) in `docs/`, registered in the root `AGENTS.md`. |
+| [qt-coding-guide](qt-coding-guide/SKILL.md) | Modern Qt 6 and QML coding on Windows with MSBuild: strict MVVM, C++/QML integration, layouts and performance, and the `qmllint` / `qmlcachegen` / `moc` tooling pipeline. |
+
+## Installation
+
+Install any skill with the `skills` CLI:
+
+```bash
+npx skills add https://github.com/k-joel/agent-skills --skill <skill-name>
+```
+
+Replace `<skill-name>` with the skill you want. For example, to install the GitHub skill:
+
+```bash
+npx skills add https://github.com/k-joel/agent-skills --skill github
+```
 
 ## Using a skill
 
@@ -35,19 +49,3 @@ Once loaded, follow the skill's `SKILL.md`. Skills that ship `scripts/` referenc
 > [!TIP]
 > Skills are self-contained: copy any skill directory into your agent's skills folder to use it
 > in another project.
-
-## Repository layout
-
-```text
-agent-skills/
-├── ask/                  # Read-only technical Q&A
-├── easy-profiler-guide/  # easy_profiler C++ integration + analysis scripts
-├── github/               # GitHub operations (gh CLI + API)
-├── init-project-docs/    # Standard docs/ initialization
-├── qt-coding-guide/      # Qt 6 / QML + MSBuild tooling
-├── .agents/skills/       # Synced community skills (see skills-lock.json)
-└── skills-lock.json      # Locked sources + hashes for synced skills
-```
-
-Most skills follow the same structure: a `SKILL.md` entry point, a `references/` directory for
-deep-dive documentation, and a `scripts/` directory for helper tooling where useful.
